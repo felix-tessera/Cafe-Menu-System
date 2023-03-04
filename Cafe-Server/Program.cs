@@ -13,6 +13,12 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World");
 
+app.MapGet("/api/menuitems/photo", async (context) =>
+{
+    //context.Response.Headers.ContentDisposition = "attachment; filename=Car3_Epx.png";
+    await context.Response.SendFileAsync("Car3_Epx.png");
+});
+
 app.MapGet("/api/categories", (MasterContext db) => db.Categories.ToList());
 
 app.MapPost("/api/categories", async (Category category, MasterContext db) =>
