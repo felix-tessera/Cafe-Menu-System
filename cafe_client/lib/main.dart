@@ -4,7 +4,7 @@ import 'main_screen.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(App());
+  runApp(const App());
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -17,9 +17,11 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MainScreen(),
     );
   }

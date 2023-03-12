@@ -1,11 +1,14 @@
-import 'package:cafe_client/models/categoty.dart';
+import 'package:cafe_client/models/category.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cafe_client/main_screen.dart';
 
 class CategoryService {
-  loadCategories() async {
+  final Function callback;
+  CategoryService(this.callback);
+
+  getCategories() async {
     List<Category> bufferData = [];
 
     final response =
@@ -26,5 +29,6 @@ class CategoryService {
       }
     }
     categoryDataList = bufferData;
+    callback();
   }
 }
