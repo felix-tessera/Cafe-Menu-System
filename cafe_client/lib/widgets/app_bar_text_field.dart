@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:cafe_client/main_screen.dart';
+import 'package:cafe_client/models/menu_item.dart';
+import 'package:cafe_client/services/menu_item_service.dart';
 
 class AppBarTextField extends StatelessWidget {
-  const AppBarTextField({
-    super.key,
-  });
+  Function callback;
+
+  AppBarTextField({super.key, required this.callback});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onTap: () {
+        MenuItemService menuItemService = MenuItemService(callback);
+        menuItemService.getMenuItems();
+      },
       onSubmitted: (value) {
         Searcher searcher = Searcher(value);
-        searcher.search();
+        menuItemDataList = searcher.search();
+        if (value == '') {
+          MenuItemService menuItemService = MenuItemService(callback);
+          menuItemService.getMenuItems();
+          debugPrint(menuItemDataList.toString());
+        }
+        callback();
       },
       keyboardType: TextInputType.text,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: "Поиск",
         hintStyle: const TextStyle(color: Colors.white),
@@ -28,18 +41,19 @@ class AppBarTextField extends StatelessWidget {
   }
 }
 
+var bufferMenuItemDataList = menuItemDataList;
+
 class Searcher {
   String searchString;
   Searcher(this.searchString);
-  var bufferMenuItemDataList = menuItemDataList;
 
-  search() {
+  List<MenuItem> search() {
     searchString = searchString.toLowerCase();
     var findedElements = menuItemDataList
         .where((element) =>
             element.name.toLowerCase().contains(searchString) == true)
         .toList();
-    menuItemDataList = findedElements;
-    debugPrint(findedElements.toString());
+    debugPrint(menuItemDataList.toString());
+    return findedElements;
   }
 }

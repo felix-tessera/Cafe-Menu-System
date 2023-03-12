@@ -1,6 +1,5 @@
 import 'package:cafe_client/services/menu_item_service.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_client/widgets/menu_item_widget.dart';
 import 'package:cafe_client/services/category_service.dart';
 import 'package:cafe_client/models/category.dart';
 import 'package:cafe_client/models/menu_item.dart';
@@ -38,7 +37,7 @@ class MainScreenState extends State<MainScreen> {
       drawer: const SideBarWidget(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF222222),
-        title: const AppBarTextField(),
+        title: AppBarTextField(callback: loadData),
         elevation: 0.0,
       ),
       body: Container(
@@ -60,16 +59,6 @@ class MainScreenState extends State<MainScreen> {
       ),
     );
   }
-
-  MenuItem menuItem = MenuItem(
-      1,
-      'Ролл "Филаделфия Лайт"',
-      '230',
-      'Форель с/с, творожный сыр, норм, рил для ролл, васаби, соевый соус, лимон. В комплект входит одиннабор палочек.',
-      '160',
-      16.0,
-      true,
-      2);
 
   loadData() async {
     setState(() {});

@@ -11,7 +11,6 @@ class CategoryListViewWidget extends StatelessWidget {
     categoryDataList.sort((a, b) => a.id.compareTo(b.id));
 
     List<Widget> categoryWidgets = [];
-    categoryWidgets.clear();
 
     for (int i = 0; i < categoryDataList.length; i++) {
       var record = CategoryWidget(category: categoryDataList[i]);
