@@ -18,8 +18,10 @@ class MenuItemService {
       for (int i = 0; i < data.length; i++) {
         data[i] as Map<String, dynamic>;
       }
-
       for (int i = 0; i < data.length; i++) {
+        data[i]['weight'] = int.parse(data[i]['weight']);
+        data[i]['caloric'] = int.parse(data[i]['caloric']);
+
         var record = MenuItem(
             data[i]['id'],
             data[i]['name'],

@@ -25,11 +25,13 @@ class CategoryListViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 35,
-      child: ListView(
-        padding: const EdgeInsets.all(8),
-        scrollDirection: Axis.horizontal,
-        children: setCategoryWidgets(),
+      height: 45,
+      child: Align(
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          scrollDirection: Axis.horizontal,
+          children: setCategoryWidgets(),
+        ),
       ),
     );
   }

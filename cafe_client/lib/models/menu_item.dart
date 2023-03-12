@@ -1,9 +1,9 @@
 class MenuItem {
   final int id;
   final String name;
-  final String weight;
+  final int weight;
   final String ingredients;
-  final String caloric;
+  final int caloric;
   final double price;
   final bool available;
   final int categoryId;

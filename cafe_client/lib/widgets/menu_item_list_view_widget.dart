@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cafe_client/main_screen.dart';
 import 'package:cafe_client/widgets/menu_item_widget.dart';
+import 'package:cafe_client/widgets/category_widget.dart';
 
 class MenuItemListViewWidget extends StatelessWidget {
-  const MenuItemListViewWidget({super.key});
+  MenuItemListViewWidget({super.key});
 
   List<Widget> setMenuItemWidgets() {
-    menuItemDataList.sort((a, b) => a.categoryId.compareTo(b.categoryId));
+    //menuItemDataList.sort((a, b) => a.categoryId.compareTo(b.categoryId));
 
     List<Widget> menuItemWidgets = [];
 
@@ -18,14 +19,19 @@ class MenuItemListViewWidget extends StatelessWidget {
     return menuItemWidgets.toList();
   }
 
+  static const index = 10;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF010101),
       width: double.infinity,
       child: ListView(
+        controller: scrollController,
         children: setMenuItemWidgets(),
       ),
     );
   }
 }
+
+final scrollController = ScrollController();

@@ -45,7 +45,7 @@ class MainScreenState extends State<MainScreen> {
         child: Column(
           children: <Widget>[
             CategoryListViewWidget(),
-            const SortDropDownWidget(),
+            SortDropDownWidget(callback: loadData),
             const SizedBox(
               height: 10,
             ),
