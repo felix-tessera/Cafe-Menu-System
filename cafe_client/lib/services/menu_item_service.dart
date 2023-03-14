@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cafe_client/models/menu_item.dart';
@@ -37,5 +37,15 @@ class MenuItemService {
       menuItemDataList = bufferData;
       callback();
     }
+  }
+
+  putMenuItem(MenuItem menuItem) async {
+    final response = await http.put(
+        Uri.parse('https://10.0.2.2:7003/api/menuitems'),
+        body: jsonEncode(menuItem),
+        headers: {'Content-Type': 'application/json'});
+    debugPrint(response.statusCode.toString());
+    debugPrint(jsonEncode(menuItem));
+    callback();
   }
 }

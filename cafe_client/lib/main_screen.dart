@@ -34,7 +34,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const SideBarWidget(),
+      drawer: SideBarWidget(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF222222),
         title: AppBarTextField(callback: loadData),

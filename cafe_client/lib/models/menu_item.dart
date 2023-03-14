@@ -10,4 +10,17 @@ class MenuItem {
 
   MenuItem(this.id, this.name, this.weight, this.ingredients, this.caloric,
       this.price, this.available, this.categoryId);
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "weight": weight.toString(),
+      "ingredients": ingredients,
+      "caloric": caloric.toString(),
+      "price": price,
+      "available": available,
+      "categoryId": categoryId
+    };
+  }
 }
