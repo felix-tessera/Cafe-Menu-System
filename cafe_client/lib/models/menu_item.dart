@@ -7,9 +7,10 @@ class MenuItem {
   final double price;
   final bool available;
   final int categoryId;
+  final String? imageLink;
 
   MenuItem(this.id, this.name, this.weight, this.ingredients, this.caloric,
-      this.price, this.available, this.categoryId);
+      this.price, this.available, this.categoryId, this.imageLink);
 
   Map<String, dynamic> toJson() {
     return {
@@ -20,7 +21,8 @@ class MenuItem {
       "caloric": caloric.toString(),
       "price": price,
       "available": available,
-      "categoryId": categoryId
+      "categoryId": categoryId,
+      "imageLink": imageLink,
     };
   }
 }

@@ -30,7 +30,8 @@ class MenuItemService {
             data[i]['caloric'],
             data[i]['price'].toDouble(),
             data[i]['available'],
-            data[i]['categoryId']);
+            data[i]['categoryId'],
+            data[i]['imageLink']);
 
         bufferData.add(record);
       }
@@ -47,5 +48,54 @@ class MenuItemService {
     debugPrint(response.statusCode.toString());
     debugPrint(jsonEncode(menuItem));
     callback();
+  }
+
+  deleteMenuItem(MenuItem menuItem) async {
+    final response = await http.delete(
+        Uri.parse('https://10.0.2.2:7003/api/menuitems/${menuItem.id}'));
+    debugPrint(response.statusCode.toString());
+    callback();
+  }
+
+  postMenuItem() async {
+    MenuItemMock categoryMock = MenuItemMock(
+        'Имя',
+        100,
+        'Ингредиент, ингредиент, игредиент',
+        100,
+        10.0,
+        true,
+        categoryDataList[0].id);
+
+    final response = await http.post(
+        Uri.parse('https://10.0.2.2:7003/api/menuitems'),
+        body: json.encode(categoryMock),
+        headers: {'Content-Type': 'application/json'});
+    getMenuItems();
+  }
+}
+
+class MenuItemMock {
+  final String name;
+  final int weight;
+  final String ingredients;
+  final int caloric;
+  final double price;
+  final bool available;
+  final int categoryId;
+
+  MenuItemMock(this.name, this.weight, this.ingredients, this.caloric,
+      this.price, this.available, this.categoryId);
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "weight": weight.toString(),
+      "ingredients": ingredients,
+      "caloric": caloric.toString(),
+      "price": price,
+      "available": available,
+      "categoryId": categoryId
+    };
   }
 }

@@ -3,7 +3,7 @@ import 'package:cafe_client/main_screen.dart';
 import 'package:cafe_client/widgets/menu_item_widget.dart';
 
 class MenuItemListViewWidget extends StatelessWidget {
-  MenuItemListViewWidget({super.key});
+  const MenuItemListViewWidget({super.key});
 
   List<Widget> setMenuItemWidgets() {
     //menuItemDataList.sort((a, b) => a.categoryId.compareTo(b.categoryId));
@@ -36,7 +36,7 @@ class MenuItemListViewWidget extends StatelessWidget {
 final scrollController = ScrollController();
 
 class MenuItemListViewManagerWidget extends StatelessWidget {
-  MenuItemListViewManagerWidget({super.key});
+  const MenuItemListViewManagerWidget({super.key});
 
   List<Widget> setMenuItemWidgets() {
     //menuItemDataList.sort((a, b) => a.categoryId.compareTo(b.categoryId));

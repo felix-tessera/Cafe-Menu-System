@@ -54,7 +54,7 @@ class SideBarWidget extends StatelessWidget {
                   count--;
                   if (count > 0) {
                     Fluttertoast.showToast(
-                      msg: 'Осталось ${count} раз!',
+                      msg: 'Осталось $count раз!',
                       backgroundColor: Colors.grey,
                     );
                   } else {
