@@ -1,3 +1,4 @@
+import 'package:cafe_client/widgets/manual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cafe_client/auth_screen.dart';
@@ -70,6 +71,34 @@ class SideBarWidget extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ManualScreen()),
+                  );
+                },
+                child: Row(
+                  children: const [
+                    Text(
+                      'Руководство пользователя',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          decoration: TextDecoration.underline),
+                    ),
+                    Icon(
+                      Icons.help,
+                      color: Colors.white,
+                      size: 18,
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),
