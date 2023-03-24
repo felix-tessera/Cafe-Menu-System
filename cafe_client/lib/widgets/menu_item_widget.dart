@@ -1,9 +1,13 @@
 import 'package:cafe_client/main_screen.dart';
 import 'package:cafe_client/models/category.dart';
+import 'package:cafe_client/services/image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_client/models/menu_item.dart';
 import 'package:cafe_client/services/menu_item_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:path/path.dart';
 
 class MenuItemWidget extends StatelessWidget {
   final MenuItem menuItem;
@@ -94,19 +98,21 @@ class MenuItemWidget extends StatelessWidget {
 
 class MenuItemImageWidget extends StatelessWidget {
   MenuItem menuItem;
-
+  static const baseUrl = 'http://felixtessera-001-site1.gtempurl.com/';
   MenuItemImageWidget({super.key, required this.menuItem});
 
   @override
   Widget build(BuildContext context) {
     if (menuItem.available && menuItem.imageLink != null) {
       try {
-        return Image.network(menuItem.imageLink.toString(), fit: BoxFit.cover);
+        return Image.network(
+            '${baseUrl}api/menuitems/images/${menuItem.imageLink}',
+            fit: BoxFit.cover);
       } catch (e) {
-        return Placeholder();
+        return const Placeholder();
       }
     } else {
-      return Placeholder();
+      return const Placeholder();
     }
   }
 }
@@ -127,6 +133,29 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
 
   _MenuItemManagerWidgetState({required this.menuItem});
 
+  _getFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      File file = File(image.path);
+      ImageService().postImage(file);
+
+      menuItem = MenuItem(
+          menuItem.id,
+          menuItem.name,
+          menuItem.weight,
+          menuItem.ingredients,
+          menuItem.caloric,
+          menuItem.price,
+          menuItem.available,
+          menuItem.categoryId,
+          basename(file.path));
+      MenuItemService(() {
+        setState(() {});
+      }).putMenuItem(menuItem);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -136,46 +165,7 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
           GestureDetector(
             onTap: () {
               String newImageLink = '';
-
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Вставьте ссылку'),
-                    content: TextFormField(
-                      initialValue: menuItem.imageLink,
-                      onChanged: (value) {
-                        newImageLink = value;
-                      },
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Применить'),
-                        onPressed: () {
-                          if (newImageLink != '') {
-                            MenuItemService menuItemService =
-                                MenuItemService(() {
-                              setState(() {});
-                            });
-                            menuItem = MenuItem(
-                                menuItem.id,
-                                menuItem.name,
-                                menuItem.weight,
-                                menuItem.ingredients,
-                                menuItem.caloric,
-                                menuItem.price,
-                                menuItem.available,
-                                menuItem.categoryId,
-                                newImageLink);
-                            menuItemService.putMenuItem(menuItem);
-                          }
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+              _getFromGallery();
             },
             child: Container(
               width: double.infinity,
@@ -214,7 +204,9 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
                                   content: TextFormField(
                                     initialValue: menuItem.name,
                                     onChanged: (value) {
-                                      newName = value;
+                                      if (value.length <= 150) {
+                                        newName = value;
+                                      }
                                     },
                                   ),
                                   actions: <Widget>[
@@ -267,11 +259,15 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text('Изменение веса'),
+                                    title: const Text(
+                                        'Изменение веса (до 4-х символов)'),
                                     content: TextFormField(
+                                      keyboardType: TextInputType.number,
                                       initialValue: menuItem.weight.toString(),
                                       onChanged: (value) {
-                                        newWeigth = value;
+                                        if (value.length <= 4) {
+                                          newWeigth = value;
+                                        }
                                       },
                                     ),
                                     actions: <Widget>[
@@ -317,11 +313,15 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: const Text('Изменение калорий'),
+                                  title: const Text(
+                                      'Изменение калорий (до 4-х символов)'),
                                   content: TextFormField(
+                                    keyboardType: TextInputType.number,
                                     initialValue: menuItem.caloric.toString(),
                                     onChanged: (value) {
-                                      newCaloric = value;
+                                      if (value.length <= 4) {
+                                        newCaloric = value;
+                                      }
                                     },
                                   ),
                                   actions: <Widget>[
@@ -430,6 +430,7 @@ class _MenuItemManagerWidgetState extends State<MenuItemManagerWidget> {
                                 return AlertDialog(
                                   title: const Text('Изменение цены'),
                                   content: TextFormField(
+                                    keyboardType: TextInputType.number,
                                     initialValue: menuItem.price.toString(),
                                     onChanged: (value) {
                                       newPrice = value;
@@ -548,7 +549,9 @@ class _PopupMenuState extends State<PopupMenu> {
                           setState(() {});
                         });
                         List<Category> categoryFinded = categoryDataList
-                            .where((element) => element.name == newCategoryId)
+                            .where((element) =>
+                                element.name.toLowerCase() ==
+                                newCategoryId.toLowerCase())
                             .toList();
                         if (categoryFinded.isNotEmpty) {
                           menuItem = MenuItem(

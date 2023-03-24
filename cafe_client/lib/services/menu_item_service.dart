@@ -7,54 +7,65 @@ import 'package:cafe_client/main_screen.dart';
 class MenuItemService {
   final Function callback;
   MenuItemService(this.callback);
+  static const baseUrl = 'http://felixtessera-001-site1.gtempurl.com/';
 
   getMenuItems() async {
-    List<MenuItem> bufferData = [];
-    final response =
-        await http.get(Uri.parse('https://10.0.2.2:7003/api/menuitems'));
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+    try {
+      List<MenuItem> bufferData = [];
+      final response = await http.get(Uri.parse('${baseUrl}api/menuitems'));
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
 
-      for (int i = 0; i < data.length; i++) {
-        data[i] as Map<String, dynamic>;
+        for (int i = 0; i < data.length; i++) {
+          data[i] as Map<String, dynamic>;
+        }
+        for (int i = 0; i < data.length; i++) {
+          data[i]['weight'] = int.parse(data[i]['weight']);
+          data[i]['caloric'] = int.parse(data[i]['caloric']);
+
+          var record = MenuItem(
+              data[i]['id'],
+              data[i]['name'],
+              data[i]['weight'],
+              data[i]['ingredients'],
+              data[i]['caloric'],
+              data[i]['price'].toDouble(),
+              data[i]['available'],
+              data[i]['categoryId'],
+              data[i]['imageLink']);
+
+          bufferData.add(record);
+        }
+        menuItemDataList = bufferData;
+        callback();
       }
-      for (int i = 0; i < data.length; i++) {
-        data[i]['weight'] = int.parse(data[i]['weight']);
-        data[i]['caloric'] = int.parse(data[i]['caloric']);
-
-        var record = MenuItem(
-            data[i]['id'],
-            data[i]['name'],
-            data[i]['weight'],
-            data[i]['ingredients'],
-            data[i]['caloric'],
-            data[i]['price'].toDouble(),
-            data[i]['available'],
-            data[i]['categoryId'],
-            data[i]['imageLink']);
-
-        bufferData.add(record);
-      }
-      menuItemDataList = bufferData;
-      callback();
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 
   putMenuItem(MenuItem menuItem) async {
-    final response = await http.put(
-        Uri.parse('https://10.0.2.2:7003/api/menuitems'),
-        body: jsonEncode(menuItem),
-        headers: {'Content-Type': 'application/json'});
-    debugPrint(response.statusCode.toString());
-    debugPrint(jsonEncode(menuItem));
-    callback();
+    try {
+      final response = await http.put(Uri.parse('${baseUrl}api/menuitems'),
+          body: jsonEncode(menuItem),
+          headers: {'Content-Type': 'application/json'});
+      debugPrint(response.statusCode.toString());
+      debugPrint(jsonEncode(menuItem));
+      callback();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   deleteMenuItem(MenuItem menuItem) async {
-    final response = await http.delete(
-        Uri.parse('https://10.0.2.2:7003/api/menuitems/${menuItem.id}'));
-    debugPrint(response.statusCode.toString());
-    callback();
+    try {
+      final response = await http
+          .delete(Uri.parse('${baseUrl}api/menuitems/${menuItem.id}'));
+      debugPrint(response.statusCode.toString());
+      callback();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   postMenuItem() async {
@@ -67,11 +78,14 @@ class MenuItemService {
         true,
         categoryDataList[0].id);
 
-    final response = await http.post(
-        Uri.parse('https://10.0.2.2:7003/api/menuitems'),
-        body: json.encode(categoryMock),
-        headers: {'Content-Type': 'application/json'});
-    getMenuItems();
+    try {
+      final response = await http.post(Uri.parse('${baseUrl}api/menuitems'),
+          body: json.encode(categoryMock),
+          headers: {'Content-Type': 'application/json'});
+      getMenuItems();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 }
 

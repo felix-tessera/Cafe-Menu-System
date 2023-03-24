@@ -8,56 +8,70 @@ class CategoryService {
   final Function callback;
   CategoryService(this.callback);
 
+  static const baseUrl = 'http://felixtessera-001-site1.gtempurl.com/';
+
   getCategories() async {
-    List<Category> bufferData = [];
+    try {
+      List<Category> bufferData = [];
 
-    final response =
-        await http.get(Uri.parse('https://10.0.2.2:7003/api/categories'));
-    if (response.statusCode == 200) {
-      debugPrint(response.body.toString());
+      final response = await http.get(Uri.parse('${baseUrl}api/categories'));
+      if (response.statusCode == 200) {
+        debugPrint(response.body.toString());
 
-      List<dynamic> data = json.decode(response.body);
+        List<dynamic> data = json.decode(response.body);
 
-      for (int i = 0; i < data.length; i++) {
-        data[i] as Map<String, dynamic>;
+        for (int i = 0; i < data.length; i++) {
+          data[i] as Map<String, dynamic>;
+        }
+
+        for (int i = 0; i < data.length; i++) {
+          var record = Category(data[i]['id'], data[i]['name']);
+
+          bufferData.add(record);
+        }
       }
-
-      for (int i = 0; i < data.length; i++) {
-        var record = Category(data[i]['id'], data[i]['name']);
-
-        bufferData.add(record);
-      }
+      categoryDataList = bufferData;
+      callback();
+    } catch (error) {
+      debugPrint(error.toString());
     }
-    categoryDataList = bufferData;
-    callback();
   }
 
   putCategory(Category category) async {
-    final response = await http.put(
-        Uri.parse('https://10.0.2.2:7003/api/categories'),
-        body: jsonEncode(category),
-        headers: {'Content-Type': 'application/json'});
-    debugPrint(response.statusCode.toString());
-    debugPrint(jsonEncode(category));
-    callback();
+    try {
+      final response = await http.put(Uri.parse('${baseUrl}api/categories'),
+          body: jsonEncode(category),
+          headers: {'Content-Type': 'application/json'});
+      debugPrint(response.statusCode.toString());
+      debugPrint(jsonEncode(category));
+      callback();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   deleteCategory(Category category) async {
-    final response = await http.delete(
-        Uri.parse('https://10.0.2.2:7003/api/categories/${category.id}'));
-    debugPrint(response.statusCode.toString());
-    getCategories();
-    callback();
+    try {
+      final response = await http
+          .delete(Uri.parse('${baseUrl}api/categories/${category.id}'));
+      debugPrint(response.statusCode.toString());
+      getCategories();
+      callback();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   postCategory() async {
     CategoryMock categoryMock = CategoryMock('Новая категория');
-
-    final response = await http.post(
-        Uri.parse('https://10.0.2.2:7003/api/categories'),
-        body: json.encode(categoryMock),
-        headers: {'Content-Type': 'application/json'});
-    getCategories();
+    try {
+      final response = await http.post(Uri.parse('${baseUrl}api/categories'),
+          body: json.encode(categoryMock),
+          headers: {'Content-Type': 'application/json'});
+      getCategories();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 }
 

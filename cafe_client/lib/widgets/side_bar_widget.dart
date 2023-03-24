@@ -1,4 +1,4 @@
-import 'package:cafe_client/widgets/manual_screen.dart';
+import 'package:cafe_client/manual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cafe_client/auth_screen.dart';
